@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from "../../interfaces/product";
 import { ProductService } from "../../services/product.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-product-form',
@@ -16,8 +17,11 @@ export class ProductFormComponent implements OnInit {
     createdAt: new Date(Date.now())
   };
 
-  constructor(private productService: ProductService) { 
-    console.log('loaded components!');
+  constructor(
+    private productService: ProductService,
+    private router: Router
+    ) { 
+    // console.log('loaded components!');
   }
 
   ngOnInit(): void {
@@ -27,7 +31,10 @@ export class ProductFormComponent implements OnInit {
     // console.log(this.product);
     this.productService.createProduct(this.product)
       .subscribe(
-        (data)=>console.log('Product created: ',data),
+        (data)=>{
+          console.log('Product created: ',data);
+          this.router.navigate(['/']);
+        },
         (err)=>console.log(err)
         );
   }
