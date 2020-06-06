@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Res, HttpStatus, Body, Param, NotFoundException } from '@nestjs/common';
-import {CreateProductDTO} from './dto/product.dto';
+import { Controller, Get, Post, Put, Delete, Res, HttpStatus, Body, Param, NotFoundException, Query } from '@nestjs/common';
+import { CreateProductDTO } from './dto/product.dto';
 import { ProductService } from "./product.service";
+import { json } from 'express';
 
 @Controller('products')
 export class ProductController {
@@ -30,10 +31,11 @@ export class ProductController {
 
         return res
         .status(HttpStatus.OK)
-        .json({
-            message: `Product Found!.`,
-            data: product
-        });
+        // .json({
+        //     message: `Product Found!.`,
+        //     data: product
+        // });
+        .json(product);
     }
 
     @Post('/')
@@ -50,32 +52,39 @@ export class ProductController {
 
     @Put('/:productID')
     async updateProduct(@Res() res, @Param('productID') productID, @Body() updateProductDTO: CreateProductDTO){
-        const product = await this.productService.updateProduct(productID, updateProductDTO);
 
-        if(!product)
+        const updated = await this.productService.updateProduct(productID, updateProductDTO);
+
+        if(!updated)
         throw new NotFoundException('Product Does not exist!');
 
         return res
         .status(HttpStatus.OK)
-        .json({
-            message: 'Product Successfully Updated',
-            data: product
-        });
+        // .json({
+        //     message: 'Product Successfully Updated',
+        //     data: product
+        // });
+        .json(
+            updated
+        )
     }
 
     @Delete('/:productID')
     async deleteProduct(@Res() res, @Param('productID') productID){
-        const product = await this.productService.deleteProduct(productID);
+        const info = await this.productService.deleteProduct(productID);
 
-        if(!product)
+        if(!info)
         throw new NotFoundException('Product Does not exist!');
 
         return res
         .status(HttpStatus.OK)
-        .json({
-            message: `Product Successfully Deleted!.`,
-            data: product
-        });
+        // .json({
+        //     message: `Product Successfully Deleted!.`,
+        //     data: product
+        // });
+        .json(
+            info
+        );
     }
 
 

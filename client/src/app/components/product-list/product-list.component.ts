@@ -22,10 +22,21 @@ export class ProductListComponent implements OnInit {
     this.productService.getProducts()
     .subscribe(
       (data) => {
-        console.log(data);
+        console.log('Fetch Products: ', data);
         this.products = data;
       },
       (err) => console.log('ERROR: ', err)
+    );
+  }
+
+  deleteProduct(id:string){
+    this.productService.deleteProduct(id)
+    .subscribe(
+      (data) => {
+        this.getProducts();
+        console.log('Product deleted!', data);
+      },
+      (err) => console.log(err)
     );
   }
 
